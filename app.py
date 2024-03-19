@@ -1,3 +1,4 @@
+
 from flask import Flask, request, abort
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
@@ -27,13 +28,13 @@ def handle_message(event):
     if "教师" in text1 or "老师" in text1 or "教学" in text1:
         # 将 LineBot 的身份设置为教师
         user_profile = {
-            "role": "teacher",
+            "role": "user",
             "content": "teach"
         }
     else:
         # 用户未指明身份或不是教师
         user_profile = {
-            "role": "other",
+            "role": "user",
             "content": "unknown"
         }
 
@@ -41,8 +42,8 @@ def handle_message(event):
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo-0125",
         messages=[
-            user_profile,  # 用户角色信息
-            {"role": "user", "content": text1}  # 用户的文本消息
+            {"role": "user", "content": text1},  # 用户的文本消息
+            user_profile  # 用户角色信息
         ],
         temperature=0.5,
     )
@@ -53,6 +54,9 @@ def handle_message(event):
         ret = '发生错误！'
 
     line_bot_api.reply_message(event.reply_token, TextSendMessage(text=ret))
+
+if __name__ == "__main__":
+    app.run(debug=True)
 
 if __name__ == "__main__":
     app.run(debug=True)
