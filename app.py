@@ -19,7 +19,6 @@ def callback():
         abort(400)
     return 'OK'
 
-@handler1.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     text1 = event.message.text
     user_profile = {
