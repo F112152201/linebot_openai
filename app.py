@@ -23,8 +23,8 @@ def callback():
 def handle_message(event):
     text1 = event.message.text
     user_profile = {
-        "occupation": "professor",
-        "ability": "Research"
+        "occupation": "teacher",
+        "ability": "teach"
     }
     response = openai.ChatCompletion.create(
         messages=[
