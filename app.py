@@ -6,7 +6,8 @@ import openai
 import os
 
 app = Flask(__name__)
-
+line_bot_api = LineBotApi('ohPtukAyth3Ezhj9G+Wf9r4WLN9Rz5/eMy81wLAaFLal6AjsNYL9pnLnNTf1Gw+L3A/dBMsBker1Pr7EiUljmO71nFezzwOcCBKZaxsl2on6xAk6aM6GpRWOU/ebYyG21vNafTmRQK0+aeWY5QTpfQdB04t89/1O/w1cDnyilFU=')
+handler = WebhookHandler('c6904e9e43fdf904980c6ba5ac4a3155')
 
 @app.route('/callback', methods=['POST'])
 def callback():
