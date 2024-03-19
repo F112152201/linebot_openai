@@ -6,36 +6,35 @@ import openai
 import os
 
 app = Flask(__name__)
-line_bot_api = LineBotApi(os.getenv('CHANNEL_ACCESS_TOKEN'))
-handler1 = WebhookHandler(os.getenv('CHANNEL_SECRET'))
-
-# 設置計數器初始值
-message_counter = 0
-
+line_bot_api = LineBotApi('ohPtukAyth3Ezhj9G+Wf9r4WLN9Rz5/eMy81wLAaFLal6AjsNYL9pnLnNTf1Gw+L3A/dBMsBker1Pr7EiUljmO71nFezzwOcCBKZaxsl2on6xAk6aM6GpRWOU/ebYyG21vNafTmRQK0+aeWY5QTpfQdB04t89/1O/w1cDnyilFU=')
+handler = WebhookHandler('c6904e9e43fdf904980c6ba5ac4a3155')
 
 @app.route('/callback', methods=['POST'])
 def callback():
-    global message_counter  # 修改計數器的值
     signature = request.headers['X-Line-Signature']
     body = request.get_data(as_text=True)
     try:
-        handler1.handle(body, signature)
+        handler.handle(body, signature)
     except InvalidSignatureError:
         abort(400)
-    message_counter += 1  # 每次處理請求時，增加計數器的值
     return 'OK'
 
-@handler1.add(MessageEvent, message=TextMessage)
+@handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    global message_counter  # 訪問計數器的值
-    text1=event.message.text
-    user_profile = {
-        "occupation": "Securities Analyst",  # 將用戶的職業設定為 "分析師"，可以根據需要修改這個值
-@@ -41,6 +48,7 @@ def handle_message(event):
+    text1 = event.message.text
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo-0125",
+        messages=[
+            {"role": "system", "content": "user_profile"},
+            {"role": "user", "content": text1}
+        ],
+        temperature=0.5,
+    )
+    try:
+        ret = response['choices'][0]['message']['content'].strip()
     except:
         ret = '發生錯誤！'
-    line_bot_api.reply_message(event.reply_token,TextSendMessage(text=ret))
-    message_counter += 1  # 每次處理時，增加計數器的值
+    line_bot_api.reply_message(event.reply_token, TextSendMessage(text=ret))
 
 if __name__ == '__main__':
     app.run()
