@@ -24,7 +24,7 @@ def handle_message(event):
     text1=event.message.text
     user_profile = {
         "occupation": "professor",  # 將用戶的職業設定為 "教授"，可以根據需要修改這個值
-        "ability": "Research"   # 將用戶的能力設定為 "研究設計"，可以根據需要修改這個值
+        "ability": "Research"   # 將用戶的能力設定為 "研究"，可以根據需要修改這個值
     response = openai.ChatCompletion.create(
         messages=[
             {"role": "user", "content": text1}
